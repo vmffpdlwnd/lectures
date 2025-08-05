@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Kakao 지도 시작하기</title>
+  </head>
+  <body>
+    <!-- 지도 표시 영역 -->
+    <div id="map" style="width: 500px; height: 400px"></div>
+
+    <!-- ✅ autoload=false 없이: 자동 로딩 -->
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=14216e37d0aab6cbf25280c28858ec8b"></script>
+
+    <!-- ✅ 지도가 뜨는 스크립트 -->
+    <script>
+      var container = document.getElementById("map"); // 지도를 담을 영역
+      var options = {
+        center: new kakao.maps.LatLng(37.194418, 126.982689), // 중심 좌표
+        level: 3, // 확대 레벨
+      };
+      var map = new kakao.maps.Map(container, options); // 지도 생성
+    </script>
+  </body>
+</html>

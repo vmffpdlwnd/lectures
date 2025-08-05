@@ -1,0 +1,8 @@
+.btn {
+  background: pink;
+  border: none;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 12px;
+  width: 80px;
+}
