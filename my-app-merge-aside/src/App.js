@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Nav from "./Nav";
-import AsideCampus from "./AsideCampus";
-import AsideBus from "./AsideBus";
-import AsideFreshman from "./AsideFreshman";
-import AsideClub from "./AsideClub";
-import AsideSupport from "./AsideSupport";
-import "./App.css";
+import Nav from "./components/Nav";
+import Aside from "./components/Aside"; // ✅ 통합된 컴포넌트
 
 const Container = styled.div`
   display: flex;
@@ -42,12 +37,8 @@ function App() {
     <>
       <Nav activeTab={activeTab} setActiveTab={setActiveTab} />
       <Container>
-        {/* 각 탭에 따른 사이드바 */}
-        {activeTab === "map" && <AsideCampus />}
-        {activeTab === "bus" && <AsideBus />}
-        {activeTab === "newB" && <AsideFreshman />}
-        {activeTab === "club" && <AsideClub />}
-        {activeTab === "assist" && <AsideSupport />}
+        {/* ✅ 공통 Aside 컴포넌트 */}
+        <Aside activeTab={activeTab} />
 
         {/* 우측 메인 컨텐츠 */}
         <div style={{ padding: "20px", flexGrow: 1 }}>
