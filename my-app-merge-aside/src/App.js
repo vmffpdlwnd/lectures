@@ -22,6 +22,13 @@ const Container = styled.div`
   display: flex;
 `;
 
+// ✅ 추가: MapView를 감싸는 컨테이너. activeTab에 따라 display 속성 변경
+const MapSection = styled.div`
+  width: 100%;
+  // 'map' 탭일 때만 보이도록 설정
+  display: ${(props) => (props.active ? "block" : "none")};
+`;
+
 function App() {
   const [activeTab, setActiveTab] = useState("map");
   const [detail, setDetail] = useState(null);
@@ -83,7 +90,7 @@ function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // ✅ 맵 탭으로 돌아올 때 relayout 호출
+  // 맵 탭으로 돌아올 때 relayout 호출 (기존 코드 유지)
   useEffect(() => {
     if (activeTab === "map" && ready && typeof relayout === "function") {
       requestAnimationFrame(() => relayout());
@@ -105,12 +112,11 @@ function App() {
           onSelectItem={setSelectedItem}
         />
         <div style={{ padding: "20px", flexGrow: 1 }}>
-          {activeTab === "map" && (
-            <>
-              <MapView id="map" height={500} />
-              <MapDetailPanel detail={detail} />
-            </>
-          )}
+          {/* ✅ 수정: MapSection으로 감싸고 active prop 전달 */}
+          <MapSection active={activeTab === "map"}>
+            <MapView id="map" height={500} />
+            <MapDetailPanel detail={detail} />
+          </MapSection>
 
           {activeTab === "bus" && (
             <img
