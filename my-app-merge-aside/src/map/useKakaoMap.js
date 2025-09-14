@@ -5,7 +5,7 @@ import { MAP_CENTER, DEFAULT_LEVEL } from "../utils/constants"; // ✅ 경로 �
 
 // Kakao Map 생성/참조 + relayout 제공 훅
 export function useKakaoMap({
-  activeTab,
+  activeTab, // ✅ activeTab을 인자로 받습니다.
   containerId = "map",
   center = MAP_CENTER,
   level = DEFAULT_LEVEL,
@@ -16,26 +16,31 @@ export function useKakaoMap({
   const lastCenterRef = useRef(center);
   const [ready, setReady] = useState(false);
 
-  // 최초 생성 + 재진입 시 SDK 보장
+  // useEffect의 의존성 배열에 activeTab을 추가합니다.
   useEffect(() => {
     let canceled = false;
-
     (async () => {
-      await loadKakaoSdk({ libraries: "services" });
-
-      if (canceled) return;
-
-      const { kakao } = window;
-      const container = document.getElementById(containerId);
-      if (!container || !kakao) return;
-
-      // 이미 만들어졌으면 ready만 true
-      if (mapRef.current) {
-        setReady(true);
+      // 탭이 'map'이 아닐 경우 지도 인스턴스를 제거합니다.
+      if (activeTab !== "map") {
+        if (mapRef.current) {
+          mapRef.current = null;
+          setReady(false);
+        }
         return;
       }
 
-      // 최초 생성
+      await loadKakaoSdk({ libraries: "services" });
+
+      if (canceled) return;
+      const { kakao } = window;
+      const container = document.getElementById(containerId);
+
+      // 컨테이너가 없으면 종료
+      if (!container || !kakao) {
+        return;
+      }
+
+      // 탭이 'map'으로 돌아왔을 때 지도를 새로 생성
       const map = new kakao.maps.Map(container, {
         center: new kakao.maps.LatLng(center.lat, center.lng),
         level,
@@ -49,11 +54,10 @@ export function useKakaoMap({
         lastCenterRef.current = { lat: c.getLat(), lng: c.getLng() };
       });
     })();
-
     return () => {
       canceled = true;
     };
-  }, [containerId, center.lat, center.lng, level]);
+  }, [activeTab, containerId, center.lat, center.lng, level]);
 
   // 🔧 외부에서 호출할 수 있는 relayout
   const relayout = () => {
@@ -62,18 +66,9 @@ export function useKakaoMap({
     if (!map || !kakao) return;
 
     map.relayout(); // 컨테이너 보임/크기 변경 반영
-
     const c = lastCenterRef.current || MAP_CENTER;
     map.setCenter(new kakao.maps.LatLng(c.lat, c.lng));
   };
-
-  // 탭이 "map"으로 돌아올 때 자동 복구(안전망)
-  useEffect(() => {
-    if (activeTab === "map" && ready) {
-      // 레이아웃 반영은 다음 프레임이 안전
-      requestAnimationFrame(() => relayout());
-    }
-  }, [activeTab, ready]);
 
   // 윈도 리사이즈 시에도 안전하게 복구
   useEffect(() => {
