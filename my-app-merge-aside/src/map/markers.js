@@ -2,19 +2,28 @@
 import { isLatLng } from "../utils/assert";
 
 export function clearMarkerAndInfo(markerRef, infoRef) {
+  // ✅ 마커(단일/배열) 모두 안전하게 제거
   if (markerRef?.current) {
-    markerRef.current.setMap(null);
+    if (Array.isArray(markerRef.current)) {
+      markerRef.current.forEach((m) => m && m.setMap && m.setMap(null));
+    } else {
+      markerRef.current.setMap?.(null);
+    }
     markerRef.current = null;
   }
+  // ✅ 인포윈도우(단일/배열) 모두 안전하게 제거
   if (infoRef?.current) {
-    infoRef.current.close();
+    if (Array.isArray(infoRef.current)) {
+      infoRef.current.forEach((i) => i && i.close && i.close());
+    } else {
+      infoRef.current.close?.();
+    }
     infoRef.current = null;
   }
 }
 
 /**
- * 마커 1개를 찍고 인포윈도우를 띄웁니다.
- * onClick 콜백을 넘기면 마커 클릭 시 호출됩니다.
+ * 마커 1개
  */
 export function dropMarker({
   map,
@@ -42,7 +51,6 @@ export function dropMarker({
   info.open(map, marker);
   infoRef.current = info;
 
-  // ✅ 마커 클릭 시 콜백 실행
   if (typeof onClick === "function") {
     kakao.maps.event.addListener(marker, "click", () => {
       onClick({ lat, lng, label });
@@ -52,7 +60,41 @@ export function dropMarker({
   return { marker, info, pos };
 }
 
-// handlers에서 쓰는 좌표 검증 헬퍼
+/**
+ * ✅ 마커 여러 개
+ * points: [{ lat, lng, label }]
+ */
+export function dropMarkers({ map, markerRef, infoRef, points, onClick }) {
+  const { kakao } = window;
+  const markers = [];
+  const infos = [];
+
+  points.forEach(({ lat, lng, label }) => {
+    const pos = new kakao.maps.LatLng(lat, lng);
+    const marker = new kakao.maps.Marker({ position: pos, map });
+    const info = new kakao.maps.InfoWindow({
+      position: pos,
+      content: `<div style="padding:6px 10px;font-size:12px;white-space:nowrap;">${label}</div>`,
+    });
+    info.open(map, marker);
+
+    if (typeof onClick === "function") {
+      kakao.maps.event.addListener(marker, "click", () =>
+        onClick({ lat, lng, label })
+      );
+    }
+
+    markers.push(marker);
+    infos.push(info);
+  });
+
+  markerRef.current = markers;
+  infoRef.current = infos;
+
+  return { markers, infos };
+}
+
+// 좌표 검증
 export function isValidCoord(coord) {
   return isLatLng(coord);
 }

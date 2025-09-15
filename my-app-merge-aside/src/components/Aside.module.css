@@ -1,5 +1,13 @@
 /* Aside.module.css */
 
+.simplebar-scrollbar::before {
+  background: linear-gradient(180deg, #7d5ab5, #401e83);
+  border-radius: 10px;
+}
+.simplebar-track.simplebar-vertical {
+  width: 8px;
+}
+
 .aside {
   width: 296px;
   height: 100vh;
@@ -35,4 +43,83 @@
 
 .asideList li:hover {
   background-color: #e0e0e0;
+}
+
+/* 섹션 헤더 버튼 */
+.sectionButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+.sectionButton:hover {
+  background: #faf7ff;
+  border-color: #e8def8;
+}
+
+/* 트리 라벨 버튼 */
+.treeButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+/* 아이템 버튼(기존 li 클릭을 버튼화) */
+.itemButton {
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.itemButton:hover {
+  background: #fafafa;
+}
+
+/* 텍스트 제목 정리 */
+.title {
+  margin: 6px 0 10px;
+}
+.subTitle {
+  margin: 14px 0 8px;
+}
+
+/* ▶ 모양의 보라색 체브론 (CSS만으로 그림) */
+.caret {
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #5f41b9;
+  border-bottom: 2px solid #5f41b9;
+  transform: rotate(45deg); /* 닫힘: 우측(▶) */
+  transition: transform 0.18s ease;
+  flex: 0 0 auto;
+  margin-left: 2px;
+}
+
+/* 열림 상태(▼) */
+.caret[data-open="true"] {
+  transform: rotate(135deg);
+}
+
+/* 목록 기본 */
+.asideList {
+  list-style: none;
+  margin: 8px 0;
+  padding: 0;
+}
+
+/* 섹션 컨테이너 마진 */
+.section {
+  margin-bottom: 10px;
 }
