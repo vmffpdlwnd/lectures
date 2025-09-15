@@ -67,6 +67,6 @@ export const ASIDE_CONTENT = {
   club: { title: "동아리", items: ["중앙동아리", "가입방법"] },
   assist: {
     title: "학생지원",
-    items: ["장학금", "상담센터", "학습지원", "교내 전화번호"],
+    items: ["장학금", "상담센터", "학습지원", "교내 전화번호", "QA"],
   },
 };

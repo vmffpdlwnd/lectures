@@ -1,5 +1,7 @@
 // FILE: src/components/AssistDetail.jsx
+
 import React from "react";
+import QA from "./QA"; // ✅ QA 컴포넌트를 임포트합니다.
 
 const SECTION = {
   장학금: {
@@ -48,13 +50,18 @@ const SECTION = {
       </>
     ),
   },
+  // ✅ 새로운 QA 항목을 추가합니다.
+  QA: {
+    title: "Q&A 게시판",
+    component: <QA />,
+  },
 };
 
 export default function AssistDetail({ selected }) {
   if (!selected) {
     return (
       <div style={{ padding: 20, color: "#666" }}>
-        좌측에서 항목을 선택하세요. (장학금 / 상담센터 / 학습지원)
+        좌측에서 항목을 선택하세요. (장학금 / 상담센터 / 학습지원 / QA)
       </div>
     );
   }
@@ -67,6 +74,11 @@ export default function AssistDetail({ selected }) {
         <p>해당 항목의 내용이 아직 준비되지 않았습니다.</p>
       </div>
     );
+  }
+
+  // ✅ 'component' 속성이 존재하면 해당 컴포넌트를 렌더링합니다.
+  if (data.component) {
+    return data.component;
   }
 
   return (
