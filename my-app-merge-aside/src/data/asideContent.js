@@ -36,7 +36,7 @@ export const ASIDE_CONTENT = {
             label: "주차장",
             children: Array.from({ length: 9 }, (_, i) => `주차장${i + 1}`),
           },
-          { label: "은행/ATM" }, // 자식 없음 → 상위 클릭 시 바로 호출
+          { label: "은행/ATM" },
           { label: "우체국" },
           { label: "병원/약국" },
           { label: "서점/문구" },
@@ -44,14 +44,25 @@ export const ASIDE_CONTENT = {
       },
     ],
   },
+
   bus: {
-    title: "버스 노선",
-    items: ["56", "1550-1"],
-    extra: {
-      title: "셔틀버스",
-      items: ["통학 셔틀", "야간 셔틀"],
-    },
+    title: "버스 정보",
+    collapsible: [
+      {
+        title: "버스 노선",
+        items: [ "56", "1550-1", "1552", "5104", "M4449" ],
+      },
+      {
+        title: "셔틀버스",
+        items: ["병점역 셔틀", "수원역 셔틀", "동탄 경유 셔틀"],
+      },
+      {
+        title: "기타 정보",
+        items: ["학교가는 버스 정보", "셔틀 운행 시간", "병점역 버스 탑승 정보"],
+      },
+    ],
   },
+
   newB: { title: "재학생 정보", items: ["학사일정", "OT 안내"] },
   club: { title: "동아리", items: ["중앙동아리", "가입방법"] },
   assist: {

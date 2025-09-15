@@ -122,6 +122,25 @@ const Aside = ({
 
                   {section.title === "편의시설" &&
                     renderTreeItems(section.items)}
+
+                  {/* 버스 관련 섹션들 추가 */}
+                  {(section.title === "셔틀버스" || 
+                    section.title === "버스 노선" || 
+                    section.title === "기타 정보") && (
+                    <ul className={styleA.asideList}>
+                      {section.items.map((item, index) => (
+                        <li
+                          key={index}
+                          onClick={() => {
+                            if (onSelectItem) onSelectItem(item);
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </>
               )}
             </div>

@@ -11,6 +11,7 @@ import {
   makeHandleSelectFacility,
 } from "./features/map/handlers";
 import MapDetailPanel from "./components/MapDetailPanel";
+import BusInfo from "./components/BusInfo";
 import CalendarPage from "./components/CalendarPage";
 import OtInfo from "./components/OtInfo";
 import ClubHub from "./components/ClubHub";
@@ -116,15 +117,9 @@ function App() {
           <MapSection active={activeTab === "map"}>
             <MapView id="map" height={500} />
             <MapDetailPanel detail={detail} />
-          </MapSection>
+          </MapSection> 
 
-          {activeTab === "bus" && (
-            <img
-              src={require("./images/KakaoTalk_20250829_104919723.png")}
-              alt="한신대학교 버스 노선도"
-              style={{ width: "100%", height: "auto" }}
-            />
-          )}
+          {activeTab === "bus" && <BusInfo selected={selectedItem} />}
 
           {activeTab === "newB" && (
             <>
