@@ -1,13 +1,5 @@
 /* Aside.module.css */
 
-.simplebar-scrollbar::before {
-  background: linear-gradient(180deg, #7d5ab5, #401e83);
-  border-radius: 10px;
-}
-.simplebar-track.simplebar-vertical {
-  width: 8px;
-}
-
 .aside {
   width: 296px;
   height: 100vh;

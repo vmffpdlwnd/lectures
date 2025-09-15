@@ -566,15 +566,6 @@ export default function ClubHub() {
           transform: "translateZ(0)",
         }}
       />
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.7) 38%, rgba(255,255,255,0.15) 100%)",
-        }}
-      />
 
       {/* 내용 */}
       <div style={{ position: "relative", zIndex: 1 }}>
@@ -616,11 +607,11 @@ export default function ClubHub() {
           style={{
             width: "100%",
             maxWidth: 460,
-            background: "rgba(255,255,255,0.96)",
+            background: "rgba(255,255,255,0.15)",
             border: "1px solid #eee",
             borderRadius: 12,
             boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
-            backdropFilter: "blur(2px)",
+            backdropFilter: "blur(1px)",
           }}
         >
           <ul style={{ listStyle: "none", margin: 0, padding: 12 }}>
