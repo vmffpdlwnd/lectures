@@ -19,8 +19,6 @@ import AssistDetail from "./components/AssistDetail";
 
 import { makeSearchIndex, searchIndex } from "./utils/searchIndex";
 
-import "simplebar-react/dist/simplebar.min.css";
-
 const Container = styled.div`
   display: flex;
 `;
