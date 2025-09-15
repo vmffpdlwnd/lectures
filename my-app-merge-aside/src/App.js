@@ -18,6 +18,7 @@ import ClubHub from "./components/ClubHub";
 import AssistDetail from "./components/AssistDetail";
 
 import { makeSearchIndex, searchIndex } from "./utils/searchIndex";
+
 import "simplebar-react/dist/simplebar.min.css";
 
 const Container = styled.div`
@@ -43,6 +44,7 @@ const MapBox = styled.div`
 const DetailBox = styled.div`
   flex: 1; /* 설명 공간 */
   overflow-y: auto;
+  max-height: 600px; /* 지도와 동일한 높이로 제한 */
 `;
 
 function App() {

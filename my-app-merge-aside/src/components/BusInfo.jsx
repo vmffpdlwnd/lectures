@@ -84,9 +84,9 @@ const SECTION = {
   body: (
     <div style={{ padding: 20, textAlign: "center" }}>
       <img
-          src={require("../images/KakaoTalk_20250829_104919723.png")}
+          src={require("../images/승하차 위치.jpeg")}
           alt="한신대학교 버스 노선도"
-          style={{ width: "80%", height: "auto", marginBottom: "20px", display: "block", margin: "0 auto 20px auto" }}
+          style={{ width: "60%", height: "auto", marginBottom: "20px", display: "block", margin: "0 auto 20px auto" }}
       />
       <img
           src={require("../images/버스정보.jpeg")}
@@ -103,12 +103,12 @@ const SECTION = {
       <img
           src={require("../images/셔틀 운행 시간.jpeg")}
           alt="셔틀 운행 시간"
-          style={{ width: "60%", height: "auto", marginBottom: "20px", display: "block", margin: "0 auto 20px auto" }}
+          style={{ width: "50%", height: "auto", marginBottom: "20px", display: "block", margin: "0 auto 20px auto" }}
       />
       <img
           src={require("../images/셔틀.jpeg")}
           alt="셔틀"
-          style={{ width: "60%", height: "auto", display: "block", margin: "0 auto" }}
+          style={{ width: "50%", height: "auto", display: "block", margin: "0 auto" }}
       />
     </div>
   ),
@@ -132,7 +132,7 @@ export default function BusInfo({ selected }) {
     return (
       <div style={{ padding: 20, textAlign: "center" }}>
         <img
-            src={require("../images/KakaoTalk_20250829_104919723.png")}
+            src={require("../images/승하차 위치.jpeg")}
             alt="한신대학교 버스 노선도"
             style={{ width: "80%", height: "auto" }}
         />
