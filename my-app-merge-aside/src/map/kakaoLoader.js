@@ -5,7 +5,7 @@ let kakaoLoadPromise = null;
 
 /**
  * Kakao Maps SDK를 동적으로 로딩합니다.
- * 반드시 libraries=services 옵션 포함해야 Roadview 사용 가능.
+ * 반드시 libraries=services 옵션 포함해야 Roadview 사용 가능. 서비스 라이브러리 필요
  *
  * @param {Object} options - 옵션 객체
  * @param {string} options.appkey - Kakao 앱 키 (기본값: 임시 키 or .env)

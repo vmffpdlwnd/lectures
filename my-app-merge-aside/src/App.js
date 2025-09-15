@@ -18,16 +18,31 @@ import ClubHub from "./components/ClubHub";
 import AssistDetail from "./components/AssistDetail";
 
 import { makeSearchIndex, searchIndex } from "./utils/searchIndex";
+import "simplebar-react/dist/simplebar.min.css";
 
 const Container = styled.div`
   display: flex;
 `;
 
-// ✅ 추가: MapView를 감싸는 컨테이너. activeTab에 따라 display 속성 변경
+// ✅ 기존: 탭 전환 시 map 섹션만 표시
 const MapSection = styled.div`
   width: 100%;
-  // 'map' 탭일 때만 보이도록 설정
   display: ${(props) => (props.active ? "block" : "none")};
+`;
+
+// ✅ 추가: 지도와 패널을 옆으로 배치
+const MapLayout = styled.div`
+  display: flex;
+  gap: 16px;
+`;
+
+const MapBox = styled.div`
+  flex: 2; /* 지도 공간 크게 */
+`;
+
+const DetailBox = styled.div`
+  flex: 1; /* 설명 공간 */
+  overflow-y: auto;
 `;
 
 function App() {
@@ -70,7 +85,7 @@ function App() {
     }
     setActiveTab("map");
 
-    // 지도 준비 기다리기
+    // 지도 준비 대기
     const waitUntil = (cond, ms = 50, tries = 40) =>
       new Promise((res) => {
         let n = 0;
@@ -91,7 +106,7 @@ function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // 맵 탭으로 돌아올 때 relayout 호출 (기존 코드 유지)
+  // 맵 탭으로 돌아올 때 relayout 호출 (존재 시)
   useEffect(() => {
     if (activeTab === "map" && ready && typeof relayout === "function") {
       requestAnimationFrame(() => relayout());
@@ -112,12 +127,19 @@ function App() {
           onSelectFacility={handleSelectFacility}
           onSelectItem={setSelectedItem}
         />
+
         <div style={{ padding: "20px", flexGrow: 1 }}>
-          {/* ✅ 수정: MapSection으로 감싸고 active prop 전달 */}
+          {/* ✅ 변경: 지도/상세 패널을 가로 배치 */}
           <MapSection active={activeTab === "map"}>
-            <MapView id="map" height={500} />
-            <MapDetailPanel detail={detail} />
-          </MapSection> 
+            <MapLayout>
+              <MapBox>
+                <MapView id="map" height={600} />
+              </MapBox>
+              <DetailBox>
+                <MapDetailPanel detail={detail} />
+              </DetailBox>
+            </MapLayout>
+          </MapSection>
 
           {activeTab === "bus" && <BusInfo selected={selectedItem} />}
 
