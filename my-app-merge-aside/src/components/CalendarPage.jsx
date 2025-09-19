@@ -1,4 +1,4 @@
-// src/components/CalendarPage.jsx
+// FILE: src/components/CalendarPage.jsx
 import React, { useState } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -9,10 +9,7 @@ import ko from "date-fns/locale/ko";
 import eventsData from "../data/eventsData";
 
 // 지역 설정 (한국어 기준)
-const locales = {
-  ko: ko,
-};
-
+const locales = { ko: ko };
 const localizer = dateFnsLocalizer({
   format,
   parse,
@@ -21,15 +18,15 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-const CalendarPage = () => {
   // 데이터의 문자열 날짜를 Date 객체로 변환
-  const formattedEvents = eventsData.map(event => ({
+const CalendarPage = ({ texts }) => {
+  const formattedEvents = eventsData.map((event) => ({
     ...event,
     start: new Date(event.start),
     end: new Date(event.end),
   }));
 
-  const [events, setEvents] = useState(formattedEvents);
+  const [events] = useState(formattedEvents);
 
   // 이벤트 타입에 따라 스타일을 다르게 적용하는 함수
   const eventPropGetter = (event) => {
@@ -47,13 +44,14 @@ const CalendarPage = () => {
     }
     return {
       className: event.type, // 타입별 클래스 이름 추가
+      className: event.type,
       style: newStyle,
     };
   };
 
   return (
     <div style={{ height: "80vh", padding: "20px" }}>
-      <h2 style={{ marginBottom: 16 }}>📅 학사일정</h2>
+      <h2 style={{ marginBottom: 16 }}>{texts.title}</h2>
       <Calendar
         localizer={localizer}
         events={events}
@@ -61,16 +59,8 @@ const CalendarPage = () => {
         endAccessor="end"
         style={{ height: "100%", borderRadius: 8 }}
         culture="ko"
-        messages={{
-          next: "다음",
-          previous: "이전",
-          today: "오늘",
-          month: "월",
-          week: "주",
-          day: "일",
-          agenda: "일정",
-        }}
-        views={['month', 'week', 'day', 'agenda']}
+        messages={texts.toolbar} // ✅ messages props를 동적으로 전달
+        views={["month", "week", "day", "agenda"]}
         eventPropGetter={eventPropGetter}
       />
     </div>

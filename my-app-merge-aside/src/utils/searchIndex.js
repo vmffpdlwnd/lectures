@@ -1,5 +1,6 @@
 // FILE: src/utils/searchIndex.js
-import { ASIDE_CONTENT } from "../data/asideContent";
+
+import { texts } from "./texts";
 import { BUILDING_DETAILS } from "../data/buildingDetails";
 
 // 문자열 정규화
@@ -15,34 +16,43 @@ export function makeSearchIndex() {
   const buildingIndex = new Map();
   const facilityIndex = new Map();
 
-  // 건물
-  const buildings = ASIDE_CONTENT.map.collapsible[0].items;
-  buildings.forEach((name) => {
-    buildingIndex.set(norm(name), { type: "building", name });
-    const alias = BUILDING_DETAILS[name]?.alias;
-    if (alias) buildingIndex.set(norm(alias), { type: "building", name });
-  });
+  const handleLangData = (lang) => {
+    const asideMap = texts[lang].aside.map;
+    
+    // 건물
+    const buildings = asideMap.collapsible[0].items;
+    buildings.forEach((name) => {
+      buildingIndex.set(norm(name), { type: "building", name });
+      if (BUILDING_DETAILS[name]?.alias) {
+        buildingIndex.set(norm(BUILDING_DETAILS[name].alias), { type: "building", name });
+      }
+    });
 
-  // 편의시설
-  const facilitySection = ASIDE_CONTENT.map.collapsible[1];
-  facilitySection.items.forEach((node) => {
-    const cat = node.label;
-    if (Array.isArray(node.children)) {
-      node.children.forEach((leaf) => {
-        facilityIndex.set(norm(leaf), {
+    // 편의시설
+    const facilitySection = asideMap.collapsible[1];
+    facilitySection.items.forEach((node) => {
+      if (typeof node === "object") {
+        const cat = node.label;
+        if (Array.isArray(node.children)) {
+          node.children.forEach((leaf) => {
+            facilityIndex.set(norm(leaf), {
+              type: "facility",
+              category: cat,
+              item: leaf,
+            });
+          });
+        }
+        facilityIndex.set(norm(cat), {
           type: "facility",
           category: cat,
-          item: leaf,
+          item: cat,
         });
-      });
-    } else {
-      facilityIndex.set(norm(cat), {
-        type: "facility",
-        category: cat,
-        item: cat,
-      });
-    }
-  });
+      }
+    });
+  };
+
+  handleLangData("ko");
+  handleLangData("en");
 
   return { buildingIndex, facilityIndex };
 }

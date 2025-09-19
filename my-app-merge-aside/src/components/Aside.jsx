@@ -1,16 +1,15 @@
 // FILE: src/components/Aside.jsx
 import { useState } from "react";
 import styleA from "./Aside.module.css";
-import { ASIDE_CONTENT } from "../data/asideContent";
 
 const Aside = ({
   activeTab,
   onSelectBuilding,
   onSelectFacility,
   onSelectItem,
-  dropMarkers,
+  texts, // ✅ texts props를 사용합니다.
 }) => {
-  const content = ASIDE_CONTENT[activeTab];
+  const content = texts.aside[activeTab]; // ✅ texts 객체에서 aside content를 가져옵니다.
   const [openSections, setOpenSections] = useState({});
   const [openNodes, setOpenNodes] = useState({});
 
@@ -116,12 +115,13 @@ const Aside = ({
                     className={styleA.caret}
                     data-open={opened ? "true" : "false"}
                   />
-                  <span>{section.title}</span>
+                  <span>{section.title}</span> {/* ✅ 번역된 텍스트를 사용합니다. */}
                 </button>
 
                 {opened && (
                   <>
-                    {section.title === "건물 목록" && (
+                    {/* "건물 목록" 섹션 */}
+                    {texts.aside.map.collapsible[0].title === section.title && (
                       <ul className={styleA.asideList}>
                         {section.items.map((item, index) => (
                           <li key={index}>
@@ -138,14 +138,14 @@ const Aside = ({
                         ))}
                       </ul>
                     )}
-
-                    {section.title === "편의시설" &&
+                    {/* "편의시설" 섹션 */}
+                    {texts.aside.map.collapsible[1].title === section.title &&
                       renderTreeItems(section.items)}
 
-                    {/* 버스 관련 섹션들 추가 */}
-                    {(section.title === "셔틀버스" || 
-                      section.title === "버스 노선" || 
-                      section.title === "기타 정보") && (
+                    {/* 버스 관련 섹션들 */}
+                    {(texts.aside.bus.collapsible[0].title === section.title ||
+                      texts.aside.bus.collapsible[1].title === section.title ||
+                      texts.aside.bus.collapsible[2].title === section.title) && (
                       <ul className={styleA.asideList}>
                         {section.items.map((item, index) => (
                           <li
