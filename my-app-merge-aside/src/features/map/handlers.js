@@ -4,9 +4,11 @@ import { FACILITIES } from "../../data/facilities";
 import {
   clearMarkerAndInfo,
   dropMarker,
+  dropMarkers, // ✅ 여러 개 마커
   isValidCoord,
 } from "../../map/markers";
 import { getBuildingDetail } from "../../data/buildingDetails";
+
 /**
  * 빌딩 선택 핸들러 팩토리
  * @param {{
@@ -14,7 +16,7 @@ import { getBuildingDetail } from "../../data/buildingDetails";
  *   markerRef: React.RefObject,
  *   infoRef: React.RefObject,
  *   ready?: boolean,
- *   onDetail?: (detail: {type:string,title:string,subtitle?:string,coords:{lat:number,lng:number}}) => void
+ *   onDetail?: (detail: {type:string,title:string,subtitle?:string,coords:{lat:number,lng:number},data?:any}) => void
  * }} deps
  */
 export function makeHandleSelectBuilding({
@@ -51,12 +53,12 @@ export function makeHandleSelectBuilding({
       lat: coord.lat,
       lng: coord.lng,
       label: name,
-      // ✅ 마커 클릭 시 상세 패널 갱신
+      // 마커 클릭 시 상세 패널 갱신
       onClick: () => onDetail && onDetail(detail),
     });
 
-    // 선택 즉시 패널도 띄우고 싶다면 아래 주석 해제
-    // onDetail && onDetail(detail);
+    // ✅ 건물 목록 클릭 즉시 상세 패널 표시
+    onDetail && onDetail(detail);
 
     map.panTo(pos);
   };
@@ -84,16 +86,56 @@ export function makeHandleSelectFacility({
     const map = mapRef.current;
     if (!map) return;
 
-    // 리프-좌표 맵 가정: FACILITIES[category][name]
-    let coord = FACILITIES?.[category]?.[name];
+    // ✅ 카테고리 클릭: 해당 카테고리의 모든 지점 마커 찍기
+    if (name == null && FACILITIES?.[category]) {
+      const entries = Object.entries(FACILITIES[category]).filter(([, coord]) =>
+        isValidCoord(coord)
+      );
+      if (entries.length === 0) {
+        console.warn(
+          "시설 좌표 없음/잘못됨:",
+          category,
+          FACILITIES?.[category]
+        );
+        return;
+      }
 
-    // name이 비어있다면 카테고리의 첫 리프 자동 선택(안전망)
-    if (!coord && name == null && FACILITIES?.[category]) {
-      const firstKey = Object.keys(FACILITIES[category])[0];
-      coord = FACILITIES[category][firstKey];
-      name = firstKey;
+      clearMarkerAndInfo(markerRef, infoRef);
+
+      const points = entries.map(([n, coord]) => ({
+        lat: coord.lat,
+        lng: coord.lng,
+        label: `${category} - ${n}`,
+      }));
+
+      // 여러 개 마커 + 인포윈도우
+      dropMarkers({
+        map,
+        markerRef,
+        infoRef,
+        points,
+        onClick: ({ lat, lng, label }) => {
+          // 마커 클릭 시 상세 패널 열기
+          onDetail &&
+            onDetail({
+              type: "facility",
+              title: label,
+              subtitle: category,
+              coords: { lat, lng },
+            });
+        },
+      });
+
+      // 모든 마커가 보이도록 지도 영역 맞춤
+      const { kakao } = window;
+      const bounds = new kakao.maps.LatLngBounds();
+      points.forEach((p) => bounds.extend(new kakao.maps.LatLng(p.lat, p.lng)));
+      map.setBounds(bounds);
+      return;
     }
 
+    // ✅ 단일 지점 선택 (기존 동작)
+    const coord = FACILITIES?.[category]?.[name];
     if (!isValidCoord(coord)) {
       console.warn(
         "시설 좌표 없음/잘못됨:",
@@ -120,12 +162,8 @@ export function makeHandleSelectFacility({
       lat: coord.lat,
       lng: coord.lng,
       label,
-      // ✅ 마커 클릭 시 상세 패널 갱신
       onClick: () => onDetail && onDetail(detail),
     });
-
-    // 선택 즉시 패널도 띄우고 싶다면 아래 주석 해제
-    // onDetail && onDetail(detail);
 
     map.panTo(pos);
   };

@@ -3,15 +3,16 @@ import logo from "../images/hanshin.png";
 import styles from "./Nav.module.css";
 import { useState } from "react";
 
-const Nav = ({ activeTab, setActiveTab, onSearch }) => {
+// ✅ export 방식 수정
+export const Nav = ({ activeTab, setActiveTab, onSearch, texts, onToggleLang }) => {
   const [query, setQuery] = useState("");
 
   const tabs = [
-    { id: "map", label: "캠퍼스 맵" },
-    { id: "bus", label: "버스" },
-    { id: "newB", label: "재학생" },
-    { id: "club", label: "동아리" },
-    { id: "assist", label: "학생지원" },
+    { id: "map", label: texts.aside.map.title },
+    { id: "bus", label: texts.aside.bus.title },
+    { id: "newB", label: texts.aside.newB.title },
+    { id: "club", label: texts.aside.club.title },
+    { id: "assist", label: texts.aside.assist.title },
   ];
 
   const submit = () => {
@@ -23,16 +24,20 @@ const Nav = ({ activeTab, setActiveTab, onSearch }) => {
     if (e.key === "Enter") submit();
   };
 
+  const goToHome = () => {
+    setActiveTab("map");
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles["top-bar"]}>
-        <div className={styles["logo"]}>
-          <img src={logo} alt="한신대학교 로고" width="80" height="60" />
+        <div className={styles["logo"]} onClick={goToHome} style={{ cursor: "pointer" }}>
+          <img src={logo} alt={texts.nav.logoAlt} width="80" height="60" />
         </div>
         <div className={styles["search-box"]}>
           <input
             type="text"
-            placeholder="검색어를 입력하세요"
+            placeholder={texts.nav.searchPlaceholder}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={onKeyDown}
@@ -40,12 +45,14 @@ const Nav = ({ activeTab, setActiveTab, onSearch }) => {
           <button
             className={styles["search-icon"]}
             onClick={submit}
-            aria-label="검색"
+            aria-label={texts.nav.searchAriaLabel}
           >
             🔍
           </button>
         </div>
-        <button className={styles["lang-btn"]}>English</button>
+        <button className={styles["lang-btn"]} onClick={onToggleLang}>
+          {texts.nav.langButton}
+        </button>
       </div>
 
       <nav className={styles["nav-bar"]}>
@@ -65,5 +72,3 @@ const Nav = ({ activeTab, setActiveTab, onSearch }) => {
     </header>
   );
 };
-
-export default Nav;
