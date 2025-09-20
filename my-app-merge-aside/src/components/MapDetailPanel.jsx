@@ -1,7 +1,6 @@
 // FILE: src/components/MapDetailPanel.jsx
 
 import React from "react";
-import { BUILDING_DETAILS } from "../data/buildingDetails";
 
 export default function MapDetailPanel({ detail }) {
   if (!detail) return null;
