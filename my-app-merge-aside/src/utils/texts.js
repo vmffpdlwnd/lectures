@@ -123,13 +123,13 @@ export const texts = {
       "학교가는 버스 정보": {
         title: "학교가는 버스 정보",
         images: [
-          { src: "버스정보.jpeg", altKey: "학교가는 버스 정보", style: { width: "60%", height: "auto", marginBottom: 20 } },
+          { src: "버스정보.jpeg", altKey: "학교가는 버스 정보", style: { width: "50%", height: "auto"} },
         ],
       },
       "셔틀 운행 시간": {
         title: "셔틀버스 운행 시간표",
         images: [
-          { src: "셔틀 운행 시간.jpeg", altKey: "셔틀 운행 시간", style: { width: "50%", height: "auto", marginBottom: 20 } },
+          { src: "셔틀 운행 시간.jpeg", altKey: "셔틀 운행 시간", style: { width: "80%", height: "auto"} },
         ],
       },
       "병점역 버스 탑승 정보": {
@@ -284,13 +284,13 @@ export const texts = {
       "Bus Info to School": {
         title: "Bus Info to School",
         images: [
-          { src: "버스정보.jpeg", altKey: "Bus Info to School", style: { width: "60%", height: "auto", marginBottom: 20 } },
+          { src: "버스정보.jpeg", altKey: "Bus Info to School", style: { width: "50%", height: "auto"} },
         ],
       },
       "Shuttle Schedule": {
         title: "Shuttle Schedule",
         images: [
-          { src: "셔틀 운행 시간.jpeg", altKey: "Shuttle Schedule", style: { width: "50%", height: "auto", marginBottom: 20 } },
+          { src: "셔틀 운행 시간.jpeg", altKey: "Shuttle Schedule", style: { width: "80%", height: "auto"} },
         ],
       },
       "Byeongjeom Station Bus Info": {
