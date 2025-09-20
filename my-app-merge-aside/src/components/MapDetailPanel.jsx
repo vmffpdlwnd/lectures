@@ -1,5 +1,7 @@
-// src/components/MapDetailPanel.jsx
+// FILE: src/components/MapDetailPanel.jsx
+
 import React from "react";
+import { BUILDING_DETAILS } from "../data/buildingDetails";
 
 export default function MapDetailPanel({ detail }) {
   if (!detail) return null;
@@ -53,6 +55,17 @@ export default function MapDetailPanel({ detail }) {
               </ul>
             </Section>
           )}
+        </>
+      )}
+
+      {/* 편의시설 상세 안내 */}
+      {type === "facility" && data && (
+        <>
+          <Section title="상세 정보">
+            <p style={{ margin: 0, fontSize: 13, color: "#444" }}>
+              {data.description || "정보 없음"}
+            </p>
+          </Section>
         </>
       )}
 

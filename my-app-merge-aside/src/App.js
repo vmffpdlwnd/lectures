@@ -64,20 +64,29 @@ function App() {
     level: DEFAULT_LEVEL,
   });
 
-  const handleSelectBuilding = makeHandleSelectBuilding({
-    mapRef,
-    markerRef,
-    infoRef,
-    ready,
-    onDetail: setDetail,
-  });
-  const handleSelectFacility = makeHandleSelectFacility({
-    mapRef,
-    markerRef,
-    infoRef,
-    ready,
-    onDetail: setDetail,
-  });
+  const handleSelectBuilding = useMemo(
+    () =>
+      makeHandleSelectBuilding({
+        mapRef,
+        markerRef,
+        infoRef,
+        ready,
+        onDetail: setDetail,
+      }),
+    [mapRef, markerRef, infoRef, ready]
+  );
+
+  const handleSelectFacility = useMemo(
+    () =>
+      makeHandleSelectFacility({
+        mapRef,
+        markerRef,
+        infoRef,
+        ready,
+        onDetail: setDetail,
+      }),
+    [mapRef, markerRef, infoRef, ready]
+  );
 
   // 검색 인덱스 준비
   const searchIndexData = useMemo(() => makeSearchIndex(), []);
@@ -150,12 +159,18 @@ function App() {
             </MapLayout>
           </MapSection>
 
-          {activeTab === "bus" && <BusInfo selected={selectedItem} texts={texts[lang]} />}
+          {activeTab === "bus" && (
+            <BusInfo selected={selectedItem} texts={texts[lang]} />
+          )}
 
           {activeTab === "newB" && (
             <>
-              {selectedItem === "학사일정" && <CalendarPage texts={texts[lang].calendarPage} />}
-              {selectedItem === "OT 안내" && <OtInfo texts={texts[lang].otInfo} />}
+              {selectedItem === "학사일정" && (
+                <CalendarPage texts={texts[lang].calendarPage} />
+              )}
+              {selectedItem === "OT 안내" && (
+                <OtInfo texts={texts[lang].otInfo} />
+              )}
               {!selectedItem && (
                 <div style={{ padding: 20, color: "#666" }}>
                   {texts[lang].newB.notSelected}
@@ -166,7 +181,9 @@ function App() {
 
           {activeTab === "club" && (
             <>
-              {selectedItem === texts[lang].aside.club.items[0] && <ClubHub texts={texts[lang].clubDetails.centralClub} />}
+              {selectedItem === texts[lang].aside.club.items[0] && (
+                <ClubHub texts={texts[lang].clubDetails.centralClub} />
+              )}
               {selectedItem === texts[lang].aside.club.items[1] && (
                 <div style={{ padding: 20 }}>
                   <h2>{texts[lang].clubDetails.howToJoin.title}</h2>
@@ -181,7 +198,9 @@ function App() {
             </>
           )}
 
-          {activeTab === "assist" && <AssistDetail selected={selectedItem} texts={texts[lang]} />}
+          {activeTab === "assist" && (
+            <AssistDetail selected={selectedItem} texts={texts[lang]} />
+          )}
         </div>
       </Container>
     </>

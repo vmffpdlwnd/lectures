@@ -2,6 +2,7 @@
 
 import { texts } from "./texts";
 import { BUILDING_DETAILS } from "../data/buildingDetails";
+import { levenshteinDistance } from "./levenshtein"; // Levenshtein 함수를 불러옵니다.
 
 // 문자열 정규화
 export const norm = (s = "") =>
@@ -54,7 +55,12 @@ export function makeSearchIndex() {
   handleLangData("ko");
   handleLangData("en");
 
-  return { buildingIndex, facilityIndex };
+  // 반환 객체에 검색 메소드를 추가합니다.
+  return {
+    buildingIndex,
+    facilityIndex,
+    search: (query) => searchIndex({ buildingIndex, facilityIndex }, query),
+  };
 }
 
 // 검색 실행 (hit 반환)
@@ -62,23 +68,32 @@ export function searchIndex({ buildingIndex, facilityIndex }, query) {
   const q = norm(query);
   if (!q) return null;
 
-  let hit = buildingIndex.get(q);
-  if (!hit) {
-    for (const [k, v] of buildingIndex)
-      if (k.includes(q)) {
-        hit = v;
-        break;
-      }
-  }
-  if (!hit) {
-    hit = facilityIndex.get(q);
-    if (!hit) {
-      for (const [k, v] of facilityIndex)
-        if (k.includes(q)) {
-          hit = v;
-          break;
-        }
+  // 1. 완전 일치 검색
+  let hit = buildingIndex.get(q) || facilityIndex.get(q);
+  if (hit) return hit;
+
+  let bestHit = null;
+  let minDistance = Infinity;
+  const maxDistance = 3; // 허용 가능한 최대 오타 수 (조절 가능)
+
+  // 2. Levenshtein 거리 기반 유사성 검색
+  // 건물 검색
+  for (const [key, value] of buildingIndex) {
+    const distance = levenshteinDistance(q, key);
+    if (distance <= maxDistance && distance < minDistance) {
+      minDistance = distance;
+      bestHit = value;
     }
   }
-  return hit || null;
+
+  // 편의시설 검색
+  for (const [key, value] of facilityIndex) {
+    const distance = levenshteinDistance(q, key);
+    if (distance <= maxDistance && distance < minDistance) {
+      minDistance = distance;
+      bestHit = value;
+    }
+  }
+
+  return bestHit;
 }
