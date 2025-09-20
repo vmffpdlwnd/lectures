@@ -18,7 +18,7 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-  // 데이터의 문자열 날짜를 Date 객체로 변환
+// 데이터의 문자열 날짜를 Date 객체로 변환
 const CalendarPage = ({ texts }) => {
   const formattedEvents = eventsData.map((event) => ({
     ...event,
@@ -26,6 +26,7 @@ const CalendarPage = ({ texts }) => {
     end: new Date(event.end),
   }));
 
+  // setEvents가 사용되지 않으므로, 경고를 제거하기 위해 배열 구조 분해를 수정했습니다.
   const [events] = useState(formattedEvents);
 
   // 이벤트 타입에 따라 스타일을 다르게 적용하는 함수
@@ -43,7 +44,7 @@ const CalendarPage = ({ texts }) => {
       newStyle.backgroundColor = "#32a852"; // 시험 기간은 녹색
     }
     return {
-      className: event.type, // 타입별 클래스 이름 추가
+      // className 속성이 중복되어 하나를 삭제했습니다.
       className: event.type,
       style: newStyle,
     };
@@ -59,7 +60,7 @@ const CalendarPage = ({ texts }) => {
         endAccessor="end"
         style={{ height: "100%", borderRadius: 8 }}
         culture="ko"
-        messages={texts.toolbar} // ✅ messages props를 동적으로 전달
+        messages={texts.toolbar} // messages props를 동적으로 전달
         views={["month", "week", "day", "agenda"]}
         eventPropGetter={eventPropGetter}
       />
